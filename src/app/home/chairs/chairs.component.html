@@ -1,46 +1,13 @@
-<div class="flex justify-center w-4/5 justify-self-center gap-28">
+<div class="flex justify-center w-4/5 justify-self-center gap-28" *ngIf="!loading">
   <div class="flex flex-col w-2/5 container">
     <div class="flex justify-between w-9/10 self-end px-5 pb-5">
       <div>A</div> <div>B</div> <div>C</div>
     </div>
-    <div class="flex justify-start gap-6">
-      <div class="flex self-center">1</div>
+    <div *ngFor="let lines of chairsByLine; index as i;" class="flex justify-start gap-6">
+      <div class="flex self-center">{{i + 1}}</div>
       <div class="flex w-full justify-between">
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-      </div>
-    </div>
-    <div class="flex justify-start gap-6">
-      <div class="flex self-center">2</div>
-      <div class="flex w-full justify-between">
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-      </div>
-    </div>
-    <div class="flex justify-start gap-6">
-      <div class="flex self-center">3</div>
-      <div class="flex w-full justify-between">
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-      </div>
-    </div>
-    <div class="flex justify-start gap-6">
-      <div class="flex self-center">4</div>
-      <div class="flex w-full justify-between">
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-      </div>
-    </div>
-    <div class="flex justify-start gap-6">
-      <div class="flex self-center">5</div>
-      <div class="flex w-full justify-between">
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
-        <app-chair-status (click)="selectedChair = 1" class="p-2.5 chair-selected"></app-chair-status>
+        <app-chair-status [chair]="chair" [ngClass]="{'chair-selected': selectedChair == chair}" *ngFor="let chair of lines" (click)="selectedChair = chair" class="p-2.5">
+        </app-chair-status>
       </div>
     </div>
   </div>
@@ -49,6 +16,13 @@
       <div class="flex gap-5"><img width="50px" height="50px" src="assets/svg/available-chair.svg"> - Poltrona livre</div>
       <div class="flex gap-5"><img width="50px" height="50px" src="assets/svg/occupied-chair.svg"> - Poltrona ocupada</div>
     </div>
-    <app-user-assignment *ngIf="selectedChair" class="container"></app-user-assignment>
+    <div *ngIf="actionsLoading.loading" class="container flex justify-center">
+      <img src="assets/gifs/loading.webp" width="50">
+    </div>
+    <app-user-assignment [loadingData]="actionsLoading" [chair]="selectedChair" *ngIf="!actionsLoading.loading && selectedChair && !selectedChair.occupied" class="container"></app-user-assignment>
+    <app-chair-detailed [loadingData]="actionsLoading" [chair]="selectedChair" *ngIf="!actionsLoading.loading && selectedChair && selectedChair.occupied" class="container"></app-chair-detailed>
   </div>
+</div>
+<div *ngIf="loading">
+  <img class="flex justify-self-center" src="assets/gifs/loading.webp"  width="100" />
 </div>
